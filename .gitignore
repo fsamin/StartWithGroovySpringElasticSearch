@@ -1,5 +1,6 @@
 out
 build
+data
 gant-build
 lib
 .classpath
@@ -10,3 +11,4 @@ lib
 *.ipr
 *.iws
 *.iml
+/bin/
