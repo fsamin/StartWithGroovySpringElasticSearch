@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import com.github.fsamin.controllers.MainController;
 
 @Configuration
-@ComponentScan(['com.github.fsamin'])
 @EnableAutoConfiguration
 class Application {
 	static main(args) {
