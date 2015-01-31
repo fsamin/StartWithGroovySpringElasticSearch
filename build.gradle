@@ -37,7 +37,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web:1.2.1.RELEASE'
     // Spring Data ElasticSearch
     compile 'org.springframework.data:spring-data-elasticsearch:1.1.0.RELEASE'
-
+	// Spring Security
+	compile 'org.springframework.boot:spring-boot-starter-security:1.2.1.RELEASE'
 
     // We use the awesome Spock testing and specification framework
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
