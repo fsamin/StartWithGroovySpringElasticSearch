@@ -4,12 +4,11 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Service;
-
-import com.github.fsamin.models.Person;
+import com.github.fsamin.models.User;
 
 @Service
-interface PersonRepository extends ElasticsearchRepository<Person, String>{
-	Person findById(String id)
-	Page<Person> findByName(String name, Pageable pageable)
-	Page<Person> findAll(Pageable pageable)
+interface UserRepository extends ElasticsearchRepository<User, Long> {
+    User findById(Long id)
+    Page<User> findByEmail(String email, Pageable pageable)
+    Page<User> findAll(Pageable pageable)
 }
