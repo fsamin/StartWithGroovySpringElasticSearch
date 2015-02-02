@@ -24,7 +24,9 @@ import org.springframework.stereotype.Component
 @EnableAutoConfiguration
 class Application {
     static main(args) {
-        SpringApplication.run(MainController, args);
+        def app = new SpringApplication(MainController);
+        app.setShowBanner(false);
+        app.run(args);
     }
 }
 
@@ -36,6 +38,8 @@ class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/secure/**").authenticated()
                 .anyRequest().permitAll();
     }
 

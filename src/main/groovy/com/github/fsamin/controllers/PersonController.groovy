@@ -26,7 +26,7 @@ class PersonController {
 
 	@RequestMapping(value="/all", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody List<Person> getALlPersons() {
-		return personRepository.findAll();
+		return personRepository.findAll().asList();
 	}
 
 	@RequestMapping(value="/{personId}", method=RequestMethod.GET, produces="application/json")
