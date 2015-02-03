@@ -4,9 +4,6 @@ import com.github.fsamin.dao.UserRepository
 import com.github.fsamin.models.User
 import com.github.fsamin.utils.Utils
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 /**
@@ -19,20 +16,16 @@ class UserService {
     UserRepository userRepository;
 
     void createUser(User user) throws KnownUserException {
-        /*
-        Page<User> allUsers = userRepository.findAll();
-        println(allUsers.totalElements);
-        allUsers.each {u -> println("--> " + u)}
-        User knownUser = userRepository.findByEmail(user.getEmail(), Utils.getSingle()).first;
+        List<User> users = userRepository.findByEmail(user.getEmail(), Utils.getSingle()).asList();
+        User knownUser = users.isEmpty() ? null : users.first();
 
         println("KnownUser : " + knownUser + " for " + user.getEmail());
-        if (knownUser != null || knownUser.id == null) {
+        if (knownUser != null) {
             println("Known User !");
             throw new KnownUserException();
         }
         println("Saving user " + user);
         userRepository.save(user);
-        */
     }
 }
 
