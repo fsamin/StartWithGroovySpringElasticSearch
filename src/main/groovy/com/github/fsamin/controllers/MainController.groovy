@@ -43,6 +43,21 @@ class MainController {
         }
         return user;
     }
+
+    @RequestMapping(value = "/declareAdmin", produces = "application/json", method = RequestMethod.POST)
+    @ResponseBody
+    User declareAdmin(@RequestParam String email,@RequestParam String password) {
+        User user = new User(
+                email: email,
+                password: password
+        );
+        try {
+            userService.createAdmin(user);
+        } catch (KnownUserException e) {
+            throw new SigninException();
+        }
+        return user;
+    }
 }
 
 @ResponseStatus(value=HttpStatus.UNAUTHORIZED, reason="Signin not allowed")
