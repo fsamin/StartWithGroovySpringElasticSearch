@@ -3,10 +3,14 @@ package com.github.fsamin
 import com.github.fsamin.controllers.MainController
 import com.github.fsamin.dao.UserRepository
 import com.github.fsamin.models.User
+import com.github.fsamin.utils.Utils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.autoconfigure.security.SecurityProperties
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -18,7 +22,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
 @Configuration
 @EnableAutoConfiguration
@@ -33,6 +39,10 @@ class Application {
 @Configuration
 @EnableWebSecurity
 class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    ElasticSearchAuthenticationProvider elasticSearchAuthenticationProvider;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -40,7 +50,8 @@ class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/secure/**").authenticated()
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
+                .and().httpBasic().realmName("Spring")
     }
 
     @Override
@@ -52,11 +63,12 @@ class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
-        auth.authenticationProvider(new ElasticSearchAuthenticationProvider());
+        auth.authenticationProvider(elasticSearchAuthenticationProvider);
     }
+
 }
 
-@Component
+@Service
 class ElasticSearchAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
@@ -65,9 +77,11 @@ class ElasticSearchAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
+        println("*** Starting authenticate **** " + authentication.getName() + " *** " + authentication.getCredentials());
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
-        User user = userRepository.findByName(username);
+        //TODO : attention s'il n'y a pas d'admin !
+        User user = userRepository.findByEmail(username, Utils.getSingle()).first();
         if (user == null) {
             throw new BadCredentialsException("Username not found.");
         }
@@ -76,6 +90,7 @@ class ElasticSearchAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Wrong password.");
         }
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+        authorities.each {auth -> println(auth.getAuthority())}
 
         return new UsernamePasswordAuthenticationToken(user, password, authorities);
     }

@@ -27,7 +27,7 @@ class UserService {
     }
 
     void createAdmin(User user) throws KnownUserException {
-        List<User> admins = userRepository.findByAuthorities(new Role(name:"ADMIN"), Utils.getSingle()).asList();
+        List<User> admins = userRepository.findByAuthorities(new Role(name:"ROLE_ADMIN"), Utils.getSingle()).asList();
         if (admins.size() > 0) {
             throw new KnownUserException();
         }
@@ -36,7 +36,7 @@ class UserService {
         if (knownUser != null) {
             throw new KnownUserException();
         }
-        user.getAuthorities().add(new Role(name:"ADMIN"));
+        user.getAuthorities().add(new Role(name:"ROLE_ADMIN"));
         userRepository.save(user);
     }
 
