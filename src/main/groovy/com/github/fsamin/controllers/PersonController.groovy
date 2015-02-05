@@ -1,21 +1,13 @@
 package com.github.fsamin.controllers
 
-import java.util.logging.Logger;
-import java.util.List;
-
+import com.github.fsamin.dao.PersonRepository
+import com.github.fsamin.models.Car
+import com.github.fsamin.models.Person
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
-import com.github.fsamin.dao.PersonRepository
-import com.github.fsamin.models.Person
-import com.github.fsamin.models.Car
+import java.util.List
 
 @RestController
 @RequestMapping(value="/person")

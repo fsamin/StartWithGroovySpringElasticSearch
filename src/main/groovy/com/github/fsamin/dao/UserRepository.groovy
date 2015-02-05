@@ -1,11 +1,11 @@
 package com.github.fsamin.dao
 
 import com.github.fsamin.models.Role
+import com.github.fsamin.models.User
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.stereotype.Service;
-import com.github.fsamin.models.User;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
+import org.springframework.stereotype.Service
 
 @Service
 interface UserRepository extends ElasticsearchRepository<User, Long> {
