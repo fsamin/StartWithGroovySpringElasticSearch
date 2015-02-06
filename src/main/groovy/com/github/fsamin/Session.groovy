@@ -10,10 +10,11 @@ import org.springframework.session.web.http.SessionRepositoryFilter
 import org.springframework.web.filter.DelegatingFilterProxy
 import redis.clients.jedis.JedisPoolConfig
 
+import javax.servlet.*
 
 @Configuration
 @EnableRedisHttpSession
-class SessionRepositoryConfig {
+class SessionConfig {
 
     @Bean
     @Order(value = 0)
@@ -33,4 +34,23 @@ class SessionRepositoryConfig {
     public JedisPoolConfig poolConfig() {
         return new JedisPoolConfig(maxTotal: 200, maxIdle: 50, maxWaitMillis: 3000, testOnBorrow: true);
     }
+
+    @Bean
+    public FilterRegistrationBean filter() {
+        FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
+        filterRegBean.setFilter(new Filter() {
+            void init(FilterConfig config){}
+            void doFilter(ServletRequest req, ServletResponse res,
+                          FilterChain chain) {
+                println("SessionId:" + req.getSession(true).getId());
+                chain.doFilter(req, res);
+            }
+            void destroy(){}
+        });
+        List<String> urlPatterns = new ArrayList<String>();
+        urlPatterns.add("/*");
+        filterRegBean.setUrlPatterns(urlPatterns);
+        return filterRegBean;
+    }
+
 }

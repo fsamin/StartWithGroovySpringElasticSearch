@@ -8,15 +8,19 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
+import javax.servlet.http.HttpServletRequest
+
 @RestController
 @ComponentScan(['com.github.fsamin', 'com.github.fsamin.controllers', 'com.github.fsamin.dao', 'com.github.fsamin.services'])
 class MainController {
+
 
     @Autowired
     UserService userService;
 
     @RequestMapping("/")
-    String home() {
+    String home(HttpServletRequest request) {
+
         return "Hello";
     }
     @RequestMapping("/about")
