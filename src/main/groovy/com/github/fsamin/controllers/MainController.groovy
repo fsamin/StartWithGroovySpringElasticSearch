@@ -19,8 +19,7 @@ class MainController {
     UserService userService;
 
     @RequestMapping("/")
-    String home(HttpServletRequest request) {
-
+    String home() {
         return "Hello";
     }
     @RequestMapping("/about")
@@ -30,13 +29,14 @@ class MainController {
 
     @RequestMapping(value = "/signin", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    User signin(@RequestParam String email,@RequestParam String password) {
+    User signin(@RequestParam String email,@RequestParam String password, HttpServletRequest request) {
         User user = new User(
                 email: email,
                 password: password
         );
         try {
             userService.createUser(user);
+            request.session.setAttribute("User", user);
         } catch (KnownUserException e) {
             throw new SigninException();
         }
@@ -45,13 +45,14 @@ class MainController {
 
     @RequestMapping(value = "/declareAdmin", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
-    User declareAdmin(@RequestParam String email,@RequestParam String password) {
+    User declareAdmin(@RequestParam String email,@RequestParam String password, HttpServletRequest request) {
         User user = new User(
                 email: email,
                 password: password
         );
         try {
             userService.createAdmin(user);
+            request.session.setAttribute("User", user);
         } catch (KnownUserException e) {
             throw new SigninException();
         }
