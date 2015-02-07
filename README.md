@@ -19,3 +19,7 @@ Dummy Groovy REST App with SpringBoot
  
 ## Dev in progress
  - Stay tuned for further proof of concept
+
+
+## Redis Session Management
+ - In order to have a full stateless server but with respect of MVC Session Design Pattern, Redis is used as a Session Container. I suggest to user redis-commander (node package) to browse your redis server.
