@@ -69,7 +69,8 @@ class ElasticSearchAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
         //TODO : attention s'il n'y a pas d'admin !
-        User user = userRepository.findByEmail(username, Utils.getSingle()).first();
+        List<User> users = userRepository.findByEmail(username, Utils.getSingle()).asList();
+        User user = users.isEmpty() ? null : users.get(0);
         if (user == null) {
             throw new BadCredentialsException("Username not found.");
         }
@@ -78,6 +79,7 @@ class ElasticSearchAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Wrong password.");
         }
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+        println("Authentication Succeed !")
         authorities.each {auth -> println(auth.getAuthority())}
 
         return new UsernamePasswordAuthenticationToken(user, password, authorities);

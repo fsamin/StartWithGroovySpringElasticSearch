@@ -43,6 +43,8 @@ class MainController {
         return user;
     }
 
+
+
     @RequestMapping(value = "/declareAdmin", produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
     User declareAdmin(@RequestParam String email,@RequestParam String password, HttpServletRequest request) {
